@@ -70,6 +70,7 @@ public final class SpringFactoriesLoader {
 
 	private static final Log logger = LogFactory.getLog(SpringFactoriesLoader.class);
 
+	//key为类加载器，value为存放spring.factories中的key-value(list)值的缓存
 	private static final Map<ClassLoader, MultiValueMap<String, String>> cache = new ConcurrentReferenceHashMap<>();
 
 
@@ -108,6 +109,8 @@ public final class SpringFactoriesLoader {
 	}
 
 	/**
+	 * 以类全名为key，返回对应的value列表（寻找位于spring.factories中的key）
+	 * <br/>------------------------------------------<br/>
 	 * Load the fully qualified class names of factory implementations of the
 	 * given type from {@value #FACTORIES_RESOURCE_LOCATION}, using the given
 	 * class loader.
@@ -129,21 +132,25 @@ public final class SpringFactoriesLoader {
 		}
 
 		try {
+			//加载所有META-INF/spring.factories的访问地址列表
 			Enumeration<URL> urls = (classLoader != null ?
 					classLoader.getResources(FACTORIES_RESOURCE_LOCATION) :
 					ClassLoader.getSystemResources(FACTORIES_RESOURCE_LOCATION));
 			result = new LinkedMultiValueMap<>();
+			//spring.factories中的所有key-value存入
 			while (urls.hasMoreElements()) {
 				URL url = urls.nextElement();
 				UrlResource resource = new UrlResource(url);
 				Properties properties = PropertiesLoaderUtils.loadProperties(resource);
 				for (Map.Entry<?, ?> entry : properties.entrySet()) {
 					String factoryTypeName = ((String) entry.getKey()).trim();
+					//将value以逗号分割，并依次存入result中，LinkedMultiValueMap的value是一个List，可以存放多个值
 					for (String factoryImplementationName : StringUtils.commaDelimitedListToStringArray((String) entry.getValue())) {
 						result.add(factoryTypeName, factoryImplementationName.trim());
 					}
 				}
 			}
+			//放入缓存
 			cache.put(classLoader, result);
 			return result;
 		}

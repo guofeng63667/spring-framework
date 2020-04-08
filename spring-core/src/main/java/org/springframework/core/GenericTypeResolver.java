@@ -100,6 +100,8 @@ public final class GenericTypeResolver {
 	}
 
 	/**
+	 * 针对给定的目标类解析给定泛型接口的单个类型参数
+	 * <br/>------------------------------------------<br/>
 	 * Resolve the single type argument of the given generic interface against
 	 * the given target class which is assumed to implement the generic interface
 	 * and possibly declare a concrete type for its type variable.

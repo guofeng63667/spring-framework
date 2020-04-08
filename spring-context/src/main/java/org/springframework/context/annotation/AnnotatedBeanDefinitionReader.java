@@ -34,6 +34,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
+ * 注解类型的BeanDefinition解析器，传入BeanDefinitionRegistry，用于向其注册beandefinition
+ * <br/>------------------------------------------<br/>
  * Convenient adapter for programmatic registration of bean classes.
  *
  * <p>This is an alternative to {@link ClassPathBeanDefinitionScanner}, applying
@@ -58,6 +60,7 @@ public class AnnotatedBeanDefinitionReader {
 
 
 	/**
+	 * 使用registry创建注解解析BeanDefinition的解析器，内部会创建ConditionEvaluator，并向registry中注入注解相关的PostProcessor的RootBeanDefinition等
 	 * Create a new {@code AnnotatedBeanDefinitionReader} for the given registry.
 	 * <p>If the registry is {@link EnvironmentCapable}, e.g. is an {@code ApplicationContext},
 	 * the {@link Environment} will be inherited, otherwise a new
@@ -84,7 +87,9 @@ public class AnnotatedBeanDefinitionReader {
 		Assert.notNull(registry, "BeanDefinitionRegistry must not be null");
 		Assert.notNull(environment, "Environment must not be null");
 		this.registry = registry;
+		//创建条件判断器（用于@Conditional相关的逻辑）
 		this.conditionEvaluator = new ConditionEvaluator(registry, environment, null);
+		//向beanFactory注册注解环境相关的postProcessor
 		AnnotationConfigUtils.registerAnnotationConfigProcessors(this.registry);
 	}
 
@@ -250,16 +255,18 @@ public class AnnotatedBeanDefinitionReader {
 			@Nullable Class<? extends Annotation>[] qualifiers, @Nullable Supplier<T> supplier,
 			@Nullable BeanDefinitionCustomizer[] customizers) {
 
+		//判断类型的所有注解中是否有包含@Conditional的，如果有，则会判断条件是否符合
 		AnnotatedGenericBeanDefinition abd = new AnnotatedGenericBeanDefinition(beanClass);
 		if (this.conditionEvaluator.shouldSkip(abd.getMetadata())) {
 			return;
 		}
 
 		abd.setInstanceSupplier(supplier);
+		//解析作用域信息
 		ScopeMetadata scopeMetadata = this.scopeMetadataResolver.resolveScopeMetadata(abd);
 		abd.setScope(scopeMetadata.getScopeName());
 		String beanName = (name != null ? name : this.beanNameGenerator.generateBeanName(abd, this.registry));
-
+		//为注册的类设置Lazy，Primary，Role等信息
 		AnnotationConfigUtils.processCommonDefinitionAnnotations(abd);
 		if (qualifiers != null) {
 			for (Class<? extends Annotation> qualifier : qualifiers) {
@@ -281,7 +288,9 @@ public class AnnotatedBeanDefinitionReader {
 		}
 
 		BeanDefinitionHolder definitionHolder = new BeanDefinitionHolder(abd, beanName);
+		//根据代理配置信息返回是否为代理的bean
 		definitionHolder = AnnotationConfigUtils.applyScopedProxyMode(scopeMetadata, definitionHolder, this.registry);
+		//将BeanDefinitionHolder注册到registory中
 		BeanDefinitionReaderUtils.registerBeanDefinition(definitionHolder, this.registry);
 	}
 

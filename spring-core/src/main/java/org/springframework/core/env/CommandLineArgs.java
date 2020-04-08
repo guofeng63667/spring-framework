@@ -26,6 +26,8 @@ import java.util.Set;
 import org.springframework.lang.Nullable;
 
 /**
+ * 命令行启动方式时，保存的参数信息
+ * <br/>------------------------------------------<br/>
  * A simple representation of command line arguments, broken into "option arguments" and
  * "non-option arguments".
  *
@@ -35,7 +37,9 @@ import org.springframework.lang.Nullable;
  */
 class CommandLineArgs {
 
+	//参数为包含--key=value形式的参数信息，value可能是多个，用list保存
 	private final Map<String, List<String>> optionArgs = new HashMap<>();
+	//参数为单个值的信息列表
 	private final List<String> nonOptionArgs = new ArrayList<>();
 
 	/**

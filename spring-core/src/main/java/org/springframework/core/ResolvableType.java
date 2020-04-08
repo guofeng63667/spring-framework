@@ -43,6 +43,9 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ *
+ * 内部封装了{@link Type}，提供获取父类，获取接口，获取范型的参数，最后可以通过resolve方法转换为{@link Class}
+ * <br/>------------------------------------------<br/>
  * Encapsulates a Java {@link java.lang.reflect.Type}, providing access to
  * {@link #getSuperType() supertypes}, {@link #getInterfaces() interfaces}, and
  * {@link #getGeneric(int...) generic parameters} along with the ability to ultimately

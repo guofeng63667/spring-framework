@@ -17,6 +17,8 @@
 package org.springframework.core.type;
 
 /**
+ * Method的元数据类型信息
+ * <br/>------------------------------------------<br/>
  * Interface that defines abstract access to the annotations of a specific
  * class, in a form that does not require that class to be loaded yet.
  *

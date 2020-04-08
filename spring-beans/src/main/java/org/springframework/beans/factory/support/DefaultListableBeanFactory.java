@@ -146,6 +146,9 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	@Nullable
 	private String serializationId;
 
+	/**
+	 * 是否允许覆盖beanDefinition
+	 */
 	/** Whether to allow re-registration of a different definition with the same name. */
 	private boolean allowBeanDefinitionOverriding = true;
 

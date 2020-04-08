@@ -130,6 +130,8 @@ public abstract class AnnotationConfigUtils {
 
 
 	/**
+	 * 向registry注册注解相关的postProcessor
+	 * <br/>------------------------------------------<br/>
 	 * Register all relevant annotation post processors in the given registry.
 	 * @param registry the registry to operate on
 	 */
@@ -138,6 +140,8 @@ public abstract class AnnotationConfigUtils {
 	}
 
 	/**
+	 * 向registry中注册注解相关的PostProcessor对象
+	 * <br/>------------------------------------------<br/>
 	 * Register all relevant annotation post processors in the given registry.
 	 * @param registry the registry to operate on
 	 * @param source the configuration source element (already extracted)
@@ -150,9 +154,11 @@ public abstract class AnnotationConfigUtils {
 
 		DefaultListableBeanFactory beanFactory = unwrapDefaultListableBeanFactory(registry);
 		if (beanFactory != null) {
+			//beanFactory中注册注解比较器——AnnotationAwareOrderComparator.INSTANCE
 			if (!(beanFactory.getDependencyComparator() instanceof AnnotationAwareOrderComparator)) {
 				beanFactory.setDependencyComparator(AnnotationAwareOrderComparator.INSTANCE);
 			}
+			//TODO 自动装配解析器（懒加载）
 			if (!(beanFactory.getAutowireCandidateResolver() instanceof ContextAnnotationAutowireCandidateResolver)) {
 				beanFactory.setAutowireCandidateResolver(new ContextAnnotationAutowireCandidateResolver());
 			}
@@ -267,11 +273,15 @@ public abstract class AnnotationConfigUtils {
 	static BeanDefinitionHolder applyScopedProxyMode(
 			ScopeMetadata metadata, BeanDefinitionHolder definition, BeanDefinitionRegistry registry) {
 
+		//获取代理模式
 		ScopedProxyMode scopedProxyMode = metadata.getScopedProxyMode();
 		if (scopedProxyMode.equals(ScopedProxyMode.NO)) {
+			//如果不用代理，则直接返回definition
 			return definition;
 		}
+		//判断是否cglib代理
 		boolean proxyTargetClass = scopedProxyMode.equals(ScopedProxyMode.TARGET_CLASS);
+		//创建代理的BeanDefinitionHolder
 		return ScopedProxyCreator.createScopedProxy(definition, registry, proxyTargetClass);
 	}
 

@@ -54,6 +54,9 @@ import org.springframework.util.Assert;
 @SuppressWarnings("serial")
 public class RootBeanDefinition extends AbstractBeanDefinition {
 
+	/**
+	 * 被代理的真实对象BeanDefinitionHolder
+	 */
 	@Nullable
 	private BeanDefinitionHolder decoratedDefinition;
 

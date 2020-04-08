@@ -33,6 +33,9 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 /**
+ *
+ * 代理的作用域FactoryBean
+ *
  * Convenient proxy factory bean for scoped objects.
  *
  * <p>Proxies created using this factory bean are thread-safe singletons

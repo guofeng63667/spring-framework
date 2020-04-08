@@ -27,6 +27,9 @@ import java.util.stream.Stream;
 import org.springframework.lang.Nullable;
 
 /**
+ *
+ * 提供了访问一个class或者method的注解的一系列方法，并且可以访问该注解的元注解的信息，可以无限传递
+ * <br/>------------------------------------------<br/>
  * Provides access to a collection of merged annotations, usually obtained
  * from a source such as a {@link Class} or {@link Method}.
  *
@@ -423,6 +426,8 @@ public interface MergedAnnotations extends Iterable<MergedAnnotation<Annotation>
 
 
 	/**
+	 * 注解搜索策略,根据不同的策略创建出来的MergedAnnotations会包含不同的集合，创建方法是{@link MergedAnnotations#from(AnnotatedElement, SearchStrategy)}
+	 * <br/>------------------------------------------<br/>
 	 * Search strategies supported by
 	 * {@link MergedAnnotations#from(AnnotatedElement, SearchStrategy)}.
 	 *
@@ -432,6 +437,8 @@ public interface MergedAnnotations extends Iterable<MergedAnnotation<Annotation>
 	enum SearchStrategy {
 
 		/**
+		 * 直接注解，本类或者本方法的直接注解，不会查找注解的元注解，或者父类或者接口的注解
+		 * <br/>------------------------------------------<br/>
 		 * Find only directly declared annotations, without considering
 		 * {@link Inherited @Inherited} annotations and without searching
 		 * superclasses or implemented interfaces.
@@ -439,6 +446,8 @@ public interface MergedAnnotations extends Iterable<MergedAnnotation<Annotation>
 		DIRECT,
 
 		/**
+		 * 会搜索本类或者本方法的直接注解，如果为类，则会搜索父类中被@Inherited注解的注解，不会搜索接口
+		 * <br/>------------------------------------------<br/>
 		 * Find all directly declared annotations as well as any
 		 * {@link Inherited @Inherited} superclass annotations. This strategy
 		 * is only really useful when used with {@link Class} types since the
@@ -449,6 +458,8 @@ public interface MergedAnnotations extends Iterable<MergedAnnotation<Annotation>
 		INHERITED_ANNOTATIONS,
 
 		/**
+		 * 和INHERITED_ANNOTATIONS类似，不过不需要父类中的注解加@Inherited注解
+		 * <br/>------------------------------------------<br/>
 		 * Find all directly declared and superclass annotations. This strategy
 		 * is similar to {@link #INHERITED_ANNOTATIONS} except the annotations
 		 * do not need to be meta-annotated with {@link Inherited @Inherited}.
@@ -457,6 +468,8 @@ public interface MergedAnnotations extends Iterable<MergedAnnotation<Annotation>
 		SUPERCLASS,
 
 		/**
+		 * 搜索包括父类和接口在内的所有注解，如果不是类，则搜索方法的注解
+		 * <br/>------------------------------------------<br/>
 		 * Perform a full search of the entire type hierarchy, including
 		 * superclasses and implemented interfaces. Superclass annotations do
 		 * not need to be meta-annotated with {@link Inherited @Inherited}.
@@ -464,6 +477,8 @@ public interface MergedAnnotations extends Iterable<MergedAnnotation<Annotation>
 		TYPE_HIERARCHY,
 
 		/**
+		 * 搜索所有父类，包括私有类在内的注解也会被搜索
+		 * <br/>------------------------------------------<br/>
 		 * Perform a full search of the entire type hierarchy on the source
 		 * <em>and</em> any enclosing classes. This strategy is similar to
 		 * {@link #TYPE_HIERARCHY} except that {@linkplain Class#getEnclosingClass()

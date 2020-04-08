@@ -27,6 +27,9 @@ import java.util.Set;
 import org.springframework.lang.Nullable;
 
 /**
+ *
+ * 可以存放多值的map，内部的value是一个List，相同key的值则放在同一个List中。
+ * <br/>------------------------------------------<br/>
  * Simple implementation of {@link MultiValueMap} that wraps a {@link LinkedHashMap},
  * storing multiple values in a {@link LinkedList}.
  *

@@ -19,6 +19,8 @@ package org.springframework.core.type;
 import org.springframework.lang.Nullable;
 
 /**
+ * Class元数据类型，获取类相关信息
+ * <br/>------------------------------------------<br/>
  * Interface that defines abstract metadata of a specific class,
  * in a form that does not require that class to be loaded yet.
  *

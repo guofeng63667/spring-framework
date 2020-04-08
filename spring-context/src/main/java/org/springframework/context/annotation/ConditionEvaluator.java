@@ -39,6 +39,10 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.MultiValueMap;
 
 /**
+ *
+ * Condition判断是否符合条件的条件判断器
+ * <br/>------------------------------------------<br/>
+ *
  * Internal class used to evaluate {@link Conditional} annotations.
  *
  * @author Phillip Webb
@@ -72,7 +76,7 @@ class ConditionEvaluator {
 	}
 
 	/**
-	 * 此处判断使用了{@code @Conditional}注解的是否符合条件的核心逻辑，返回true，则代表跳过
+	 * 此处判断使用了{@code @Conditional}注解的东西是否符合Condition的核心逻辑，返回true，则代表跳过
 	 * <br/>------------------------------------------<br/>
 	 * Determine if an item should be skipped based on {@code @Conditional} annotations.
 	 * @param metadata the meta data

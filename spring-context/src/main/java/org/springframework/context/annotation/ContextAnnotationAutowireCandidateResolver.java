@@ -36,6 +36,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
+ * 包含懒加载逻辑的自动装配器
+ * <br/>------------------------------------------<br/>
  * Complete implementation of the
  * {@link org.springframework.beans.factory.support.AutowireCandidateResolver} strategy
  * interface, providing support for qualifier annotations as well as for lazy resolution
