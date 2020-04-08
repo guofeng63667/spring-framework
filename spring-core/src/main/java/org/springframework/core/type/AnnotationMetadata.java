@@ -26,6 +26,8 @@ import org.springframework.core.annotation.MergedAnnotations;
 import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
 
 /**
+ * 定义了一个具体类一系列获取该类注解的方法
+ * <br/>------------------------------------------<br/>
  * Interface that defines abstract access to the annotations of a specific
  * class, in a form that does not require that class to be loaded yet.
  *
@@ -93,6 +95,8 @@ public interface AnnotationMetadata extends ClassMetadata, AnnotatedTypeMetadata
 	}
 
 	/**
+	 * 确定潜在类是否有任何方法使用了annotationName注解，如果有则返回true。
+	 * <br/>------------------------------------------<br/>
 	 * Determine whether the underlying class has any methods that are
 	 * annotated (or meta-annotated) with the given annotation type.
 	 * @param annotationName the fully qualified class name of the annotation

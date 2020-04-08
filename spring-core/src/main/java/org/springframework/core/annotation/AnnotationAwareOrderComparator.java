@@ -26,6 +26,9 @@ import org.springframework.core.annotation.MergedAnnotations.SearchStrategy;
 import org.springframework.lang.Nullable;
 
 /**
+ *
+ * 对在class或者method上使用了{@link Order}或者{@code @Priority}注解的进行排序
+ * <br/>------------------------------------------<br/>
  * {@code AnnotationAwareOrderComparator} is an extension of
  * {@link OrderComparator} that supports Spring's
  * {@link org.springframework.core.Ordered} interface as well as the

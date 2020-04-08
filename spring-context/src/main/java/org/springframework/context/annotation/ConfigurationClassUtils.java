@@ -142,6 +142,8 @@ abstract class ConfigurationClassUtils {
 	}
 
 	/**
+	 * 判断metadata所代表的对象是不是一个配置类
+	 * <br/>------------------------------------------<br/>
 	 * Check the given metadata for a configuration class candidate
 	 * (or nested component class declared within a configuration/component class).
 	 * @param metadata the metadata of the annotated class

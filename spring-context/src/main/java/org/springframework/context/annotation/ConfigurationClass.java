@@ -48,6 +48,9 @@ import org.springframework.util.ClassUtils;
  */
 final class ConfigurationClass {
 
+	/**
+	 * 该配置类获取其相关annotation信息的元数据类
+	 */
 	private final AnnotationMetadata metadata;
 
 	private final Resource resource;
@@ -136,6 +139,10 @@ final class ConfigurationClass {
 	}
 
 
+	/**
+	 * 该配置类获取其相关annotation信息的元数据类
+	 * @return
+	 */
 	public AnnotationMetadata getMetadata() {
 		return this.metadata;
 	}

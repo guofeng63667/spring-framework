@@ -29,6 +29,9 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.MultiValueMap;
 
 /**
+ *
+ * 获取一个类的注解相关的方法
+ * <br/>------------------------------------------<br/>
  * Defines access to the annotations of a specific type ({@link AnnotationMetadata class}
  * or {@link MethodMetadata method}), in a form that does not necessarily require the
  * class-loading.

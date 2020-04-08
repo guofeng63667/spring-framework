@@ -36,6 +36,8 @@ public interface ClassMetadata {
 	String getClassName();
 
 	/**
+	 * 是否只是一个接口或者注解，而非具体实例的对象
+	 * <br/>------------------------------------------<br/>
 	 * Return whether the underlying class represents an interface.
 	 */
 	boolean isInterface();

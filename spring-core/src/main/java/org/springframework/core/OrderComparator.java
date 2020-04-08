@@ -24,6 +24,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ObjectUtils;
 
 /**
+ * 对实现了{@link Ordered}接口的实例进行排序
+ * <br/>------------------------------------------<br/>
  * {@link Comparator} implementation for {@link Ordered} objects, sorting
  * by order value ascending, respectively by priority descending.
  *

@@ -72,6 +72,8 @@ class ConditionEvaluator {
 	}
 
 	/**
+	 * 此处判断使用了{@code @Conditional}注解的是否符合条件的核心逻辑，返回true，则代表跳过
+	 * <br/>------------------------------------------<br/>
 	 * Determine if an item should be skipped based on {@code @Conditional} annotations.
 	 * @param metadata the meta data
 	 * @param phase the phase of the call
@@ -83,6 +85,9 @@ class ConditionEvaluator {
 		}
 
 		if (phase == null) {
+			/*如果为配置类，则递归调用本方法使用ConfigurationPhase.PARSE_CONFIGURATION进行判断Condition是否满足条件
+			  否则使用ConfigurationPhase.REGISTER_BEAN作为普通bean进行判断
+			 */
 			if (metadata instanceof AnnotationMetadata &&
 					ConfigurationClassUtils.isConfigurationCandidate((AnnotationMetadata) metadata)) {
 				return shouldSkip(metadata, ConfigurationPhase.PARSE_CONFIGURATION);
@@ -90,6 +95,7 @@ class ConditionEvaluator {
 			return shouldSkip(metadata, ConfigurationPhase.REGISTER_BEAN);
 		}
 
+		//获取所有@Conditional中指定的Condition类，并进行实例化
 		List<Condition> conditions = new ArrayList<>();
 		for (String[] conditionClasses : getConditionClasses(metadata)) {
 			for (String conditionClass : conditionClasses) {
@@ -98,8 +104,10 @@ class ConditionEvaluator {
 			}
 		}
 
+		//对Condition添加了@Order或者@Priority注解的进行排序
 		AnnotationAwareOrderComparator.sort(conditions);
 
+		//遍历conditions，并判断是否有不满足condition的，如果有则返回true进行跳过，否则最后返回false
 		for (Condition condition : conditions) {
 			ConfigurationPhase requiredPhase = null;
 			if (condition instanceof ConfigurationCondition) {
