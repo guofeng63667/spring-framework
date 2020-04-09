@@ -26,6 +26,10 @@ import org.springframework.web.context.ServletConfigAware;
 import org.springframework.web.context.ServletContextAware;
 
 /**
+ *
+ * 为bean初始化时为bean注入ServletContext的post-Processor，需要bean实现{@link ServletContextAware}接口
+ * <br/>------------------------------------------<br/>
+ *
  * {@link org.springframework.beans.factory.config.BeanPostProcessor}
  * implementation that passes the ServletContext to beans that implement
  * the {@link ServletContextAware} interface.

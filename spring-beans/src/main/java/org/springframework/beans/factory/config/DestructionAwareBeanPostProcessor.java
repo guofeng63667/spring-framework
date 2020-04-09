@@ -19,6 +19,9 @@ package org.springframework.beans.factory.config;
 import org.springframework.beans.BeansException;
 
 /**
+ *
+ * 在BeanPostProcessor基础上增加了可以在bean销毁前回调的方法
+ * <br/>------------------------------------------<br/>
  * Subinterface of {@link BeanPostProcessor} that adds a before-destruction callback.
  *
  * <p>The typical usage will be to invoke custom destruction callbacks on

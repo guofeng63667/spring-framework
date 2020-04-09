@@ -31,6 +31,9 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ObjectUtils;
 
 /**
+ *
+ * 检测寻找实现了{@code ApplicationListener}的bean，并存放到singletonNames中,key为bean的名字，value为是否为单例的boolean型，不过仅对顶级bean起作用。
+ * <br/>------------------------------------------<br/>
  * {@code BeanPostProcessor} that detects beans which implement the {@code ApplicationListener}
  * interface. This catches beans that can't reliably be detected by {@code getBeanNamesForType}
  * and related operations which only work against top-level beans.
@@ -74,6 +77,7 @@ class ApplicationListenerDetector implements DestructionAwareBeanPostProcessor, 
 		if (bean instanceof ApplicationListener) {
 			// potentially not detected as a listener by getBeanNamesForType retrieval
 			Boolean flag = this.singletonNames.get(beanName);
+			//如果是单例则添加到applicationContext的applicationListener中，否则从singletonNames中移除
 			if (Boolean.TRUE.equals(flag)) {
 				// singleton bean (top-level or inner): register on the fly
 				this.applicationContext.addApplicationListener((ApplicationListener<?>) bean);

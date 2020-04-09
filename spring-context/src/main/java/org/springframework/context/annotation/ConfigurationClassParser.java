@@ -166,6 +166,10 @@ class ConfigurationClassParser {
 	}
 
 
+	/**
+	 * 解析@configuration,@Import,@ComponentScan,@Conditional等关键配置，并递归处理
+	 * @param configCandidates
+	 */
 	public void parse(Set<BeanDefinitionHolder> configCandidates) {
 		for (BeanDefinitionHolder holder : configCandidates) {
 			BeanDefinition bd = holder.getBeanDefinition();
@@ -244,6 +248,7 @@ class ConfigurationClassParser {
 			}
 		}
 
+		//递归处理配置类以及他的父级，会处理@Configuration,@Import,@ComponentScan等关键注解
 		// Recursively process the configuration class and its superclass hierarchy.
 		SourceClass sourceClass = asSourceClass(configClass, filter);
 		do {

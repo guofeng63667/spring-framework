@@ -57,6 +57,9 @@ public class ContextLoaderListener extends ContextLoader implements ServletConte
 	}
 
 	/**
+	 * 通过传入WebApplicationContext对象来创建一个ContextLoaderListener，这种构造方式只有在servlet3.0以上的环境才会用到，
+	 * 通过 {@link javax.servlet.ServletContext#addListener}api进行实现添加ServletContextListener
+	 * <br/>------------------------------------------<br/>
 	 * Create a new {@code ContextLoaderListener} with the given application context. This
 	 * constructor is useful in Servlet 3.0+ environments where instance-based
 	 * registration of listeners is possible through the {@link javax.servlet.ServletContext#addListener}

@@ -32,6 +32,13 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ReflectionUtils;
 
 /**
+ *
+ * 是servlet3.0+中为了实现ServletContext可编程，所提供的ServletContainerInitializer具体实现，
+ * 由spring通过SPI方式在META-INF/services/javax.servlet.ServletContainerInitializer中配置为当前类，
+ * servlet3.0中会自动扫描到当前类并注入@HandlesTypes注解中提供的WebApplicationInitializer.class类型列表，
+ * 然后实现WebApplicationInitializer的调用，并传入ServletContext，以此可实现ServletContext可编程。具体可以看
+ * {@link WebApplicationInitializer}
+ * <br/>------------------------------------------<br/>
  * Servlet 3.0 {@link ServletContainerInitializer} designed to support code-based
  * configuration of the servlet container using Spring's {@link WebApplicationInitializer}
  * SPI as opposed to (or possibly in combination with) the traditional
@@ -168,6 +175,7 @@ public class SpringServletContainerInitializer implements ServletContainerInitia
 
 		servletContext.log(initializers.size() + " Spring WebApplicationInitializers detected on classpath");
 		AnnotationAwareOrderComparator.sort(initializers);
+		//在此处进行了初始化器的onStartup调用并传入了servletContext
 		for (WebApplicationInitializer initializer : initializers) {
 			initializer.onStartup(servletContext);
 		}

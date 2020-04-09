@@ -175,6 +175,8 @@ public abstract class WebApplicationContextUtils {
 	}
 
 	/**
+	 * 注册web的不同作用域类型，注册特殊解析类型-主要是ServletRequest，ServletResponse，HttpSession，WebRequest
+	 * <br/>------------------------------------------<br/>
 	 * Register web-specific scopes ("request", "session", "globalSession", "application")
 	 * with the given BeanFactory, as used by the WebApplicationContext.
 	 * @param beanFactory the BeanFactory to configure

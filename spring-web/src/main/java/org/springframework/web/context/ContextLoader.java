@@ -248,6 +248,8 @@ public class ContextLoader {
 
 
 	/**
+	 * 初始化并刷新applicationContext
+	 * <br/>------------------------------------------<br/>
 	 * Initialize Spring's web application context for the given servlet context,
 	 * using the application context provided at construction time, or creating a new one
 	 * according to the "{@link #CONTEXT_CLASS_PARAM contextClass}" and
@@ -273,6 +275,7 @@ public class ContextLoader {
 		long startTime = System.currentTimeMillis();
 
 		try {
+			//实例化applicationContext
 			// Store context in local instance variable, to guarantee that
 			// it is available on ServletContext shutdown.
 			if (this.context == null) {
@@ -280,6 +283,7 @@ public class ContextLoader {
 			}
 			if (this.context instanceof ConfigurableWebApplicationContext) {
 				ConfigurableWebApplicationContext cwac = (ConfigurableWebApplicationContext) this.context;
+				//如果没有refresh过，则进行初始化器回调和refresh applicationContext
 				if (!cwac.isActive()) {
 					// The context has not yet been refreshed -> provide services such as
 					// setting the parent context, setting the application context id, etc
@@ -317,6 +321,8 @@ public class ContextLoader {
 	}
 
 	/**
+	 * 寻找具体应用的ConfigurableWebApplicationContext并实例化返回
+	 * <br/>------------------------------------------<br/>
 	 * Instantiate the root WebApplicationContext for this loader, either the
 	 * default context class or a custom context class if specified.
 	 * <p>This implementation expects custom contexts to implement the
@@ -329,6 +335,7 @@ public class ContextLoader {
 	 * @see ConfigurableWebApplicationContext
 	 */
 	protected WebApplicationContext createWebApplicationContext(ServletContext sc) {
+		//寻找xml中配置的contextClass变量或者返回默认的XmlWebApplicationContext类型
 		Class<?> contextClass = determineContextClass(sc);
 		if (!ConfigurableWebApplicationContext.class.isAssignableFrom(contextClass)) {
 			throw new ApplicationContextException("Custom context class [" + contextClass.getName() +
@@ -338,6 +345,8 @@ public class ContextLoader {
 	}
 
 	/**
+	 * 确定WebApplicationContext的具体实现类型返回
+	 * <br/>------------------------------------------<br/>
 	 * Return the WebApplicationContext implementation class to use, either the
 	 * default XmlWebApplicationContext or a custom context class if specified.
 	 * @param servletContext current servlet context
@@ -368,6 +377,11 @@ public class ContextLoader {
 		}
 	}
 
+	/**
+	 * 确定配置文件位置，初始化器回调，对applicationContext刷新
+	 * @param wac
+	 * @param sc
+	 */
 	protected void configureAndRefreshWebApplicationContext(ConfigurableWebApplicationContext wac, ServletContext sc) {
 		if (ObjectUtils.identityToString(wac).equals(wac.getId())) {
 			// The application context id is still set to its original default value
@@ -386,6 +400,7 @@ public class ContextLoader {
 		wac.setServletContext(sc);
 		String configLocationParam = sc.getInitParameter(CONFIG_LOCATION_PARAM);
 		if (configLocationParam != null) {
+			//设置spring的xml配置文件位置
 			wac.setConfigLocation(configLocationParam);
 		}
 
@@ -396,12 +411,15 @@ public class ContextLoader {
 		if (env instanceof ConfigurableWebEnvironment) {
 			((ConfigurableWebEnvironment) env).initPropertySources(sc, null);
 		}
-
+		//对配置对初始化器列表进行回调
 		customizeContext(sc, wac);
+		//对applicationContext刷新
 		wac.refresh();
 	}
 
 	/**
+	 * 对配置的初始化器进行寻找，实例化并调用
+	 * <br/>------------------------------------------<br/>
 	 * Customize the {@link ConfigurableWebApplicationContext} created by this
 	 * ContextLoader after config locations have been supplied to the context
 	 * but before the context is <em>refreshed</em>.
@@ -423,6 +441,7 @@ public class ContextLoader {
 				determineContextInitializerClasses(sc);
 
 		for (Class<ApplicationContextInitializer<ConfigurableApplicationContext>> initializerClass : initializerClasses) {
+			//解析出初始化器的真实范型参数类型，确定是否和wac对象匹配，如果不匹配则抛出异常，否则就实例化初始化器，添加到contextInitializers中
 			Class<?> initializerContextClass =
 					GenericTypeResolver.resolveTypeArgument(initializerClass, ApplicationContextInitializer.class);
 			if (initializerContextClass != null && !initializerContextClass.isInstance(wac)) {
@@ -434,14 +453,17 @@ public class ContextLoader {
 			}
 			this.contextInitializers.add(BeanUtils.instantiateClass(initializerClass));
 		}
-
+		//对初始化器按注解Order或者Priority排序
 		AnnotationAwareOrderComparator.sort(this.contextInitializers);
+		//调用初始化器回调
 		for (ApplicationContextInitializer<ConfigurableApplicationContext> initializer : this.contextInitializers) {
 			initializer.initialize(wac);
 		}
 	}
 
 	/**
+	 * 获取配置的初始化器，配置的变量名为globalInitializerClasses和contextInitializerClasses，使用逗号分割。返回初始化器的Class列表
+	 * <br/>------------------------------------------<br/>
 	 * Return the {@link ApplicationContextInitializer} implementation classes to use
 	 * if any have been specified by {@link #CONTEXT_INITIALIZER_CLASSES_PARAM}.
 	 * @param servletContext current servlet context
@@ -470,6 +492,11 @@ public class ContextLoader {
 		return classes;
 	}
 
+	/**
+	 * 加载初始化器的Class类型
+	 * @param className
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	private Class<ApplicationContextInitializer<ConfigurableApplicationContext>> loadInitializerClass(String className) {
 		try {

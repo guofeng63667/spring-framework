@@ -20,6 +20,11 @@ import org.springframework.beans.BeansException;
 import org.springframework.lang.Nullable;
 
 /**
+ *
+ * 允许自定义修改新bean实例的工厂钩子，例如，检查标记接口或用代理包装bean。
+ * 通常，通过标记接口等填充bean的后处理器将实现 {@link #postProcessBeforeInitialization}方法，而使用代理包装bean的后处理器通常实现{@link #postProcessAfterInitialization}。
+ * <br/>------------------------------------------<br/>
+ *
  * Factory hook that allows for custom modification of new bean instances &mdash;
  * for example, checking for marker interfaces or wrapping beans with proxies.
  *
@@ -29,12 +34,18 @@ import org.springframework.lang.Nullable;
  * implement {@link #postProcessAfterInitialization}.
  *
  * <h3>Registration</h3>
+ * ApplicationContext可以在其bean定义中自动检测beanPostProcessorbean，并将这些后处理器应用于随后创建的任何bean。
+ * 一个普通的bean factory允许对后处理器进行编程注册，将它们应用于通过bean工厂创建的所有bean。
  * <p>An {@code ApplicationContext} can autodetect {@code BeanPostProcessor} beans
  * in its bean definitions and apply those post-processors to any beans subsequently
  * created. A plain {@code BeanFactory} allows for programmatic registration of
  * post-processors, applying them to all beans created through the bean factory.
  *
  * <h3>Ordering</h3>
+ * 在ApplicationContext中自动检测到的BeanPostProcessor bean将根据org.springframework.core.PriorityOrdered
+ * 和org.springframework.core.ordered语义进行排序。相反，以编程方式在BeanFactory中注册的beanPostProcessorbean
+ * 将按注册顺序应用；通过PriorityOrdered或Ordered接口实现表示的任何排序语义对于以编程方式注册的后处理器都将被忽略。
+ * 此外，beanPostProcessorbean不考虑@Order注释。
  * <p>{@code BeanPostProcessor} beans that are autodetected in an
  * {@code ApplicationContext} will be ordered according to
  * {@link org.springframework.core.PriorityOrdered} and

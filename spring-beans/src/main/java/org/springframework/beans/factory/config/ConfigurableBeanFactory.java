@@ -250,6 +250,8 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	int getBeanPostProcessorCount();
 
 	/**
+	 * 注册bean的作用域
+	 * <br/>------------------------------------------<br/>
 	 * Register the given scope, backed by the given Scope implementation.
 	 * @param scopeName the scope identifier
 	 * @param scope the backing Scope implementation
@@ -277,6 +279,7 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	Scope getRegisteredScope(String scopeName);
 
 	/**
+	 * 获取一个此factory安全的访问控制方式的对象
 	 * Provides a security access control context relevant to this factory.
 	 * @return the applicable AccessControlContext (never {@code null})
 	 * @since 3.0

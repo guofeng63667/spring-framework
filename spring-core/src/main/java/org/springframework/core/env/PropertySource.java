@@ -190,6 +190,7 @@ public abstract class PropertySource<T> {
 
 
 	/**
+	 * 真实对象的占位符
 	 * {@code PropertySource} to be used as a placeholder in cases where an actual
 	 * property source cannot be eagerly initialized at application context
 	 * creation time.  For example, a {@code ServletContext}-based property source
