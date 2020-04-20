@@ -33,6 +33,11 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
+ *
+ * 事务同步管理器，主要提供了线程获取事务信息的各种静态方法，内部使用ThreadLocal来保存事务信息，
+ * 这样保证不同的线程间获取事务或者数据库连接信息时能够保证安全。
+ * <br/>------------------------------------------<br/>
+ *
  * Central delegate that manages resources and transaction synchronizations per thread.
  * To be used by resource management code but not by typical application code.
  *
@@ -80,7 +85,7 @@ public abstract class TransactionSynchronizationManager {
 
 	private static final ThreadLocal<Map<Object, Object>> resources =
 			new NamedThreadLocal<>("Transactional resources");
-
+	//当线程中开启了一个事务后，synchronizations中会存在一个空set，表示开启了同步
 	private static final ThreadLocal<Set<TransactionSynchronization>> synchronizations =
 			new NamedThreadLocal<>("Transaction synchronizations");
 
@@ -92,7 +97,7 @@ public abstract class TransactionSynchronizationManager {
 
 	private static final ThreadLocal<Integer> currentTransactionIsolationLevel =
 			new NamedThreadLocal<>("Current transaction isolation level");
-
+	//标记一个线程是否有真实开启一个事务，在开启和结束事务时进行设置
 	private static final ThreadLocal<Boolean> actualTransactionActive =
 			new NamedThreadLocal<>("Actual transaction active");
 

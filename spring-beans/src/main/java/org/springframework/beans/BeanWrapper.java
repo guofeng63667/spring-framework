@@ -19,6 +19,9 @@ package org.springframework.beans;
 import java.beans.PropertyDescriptor;
 
 /**
+ *
+ * 包装bean，一般里面会存放真实的bean
+ * <br/>------------------------------------------<br/>
  * The central interface of Spring's low-level JavaBeans infrastructure.
  *
  * <p>Typically not used directly but rather implicitly via a

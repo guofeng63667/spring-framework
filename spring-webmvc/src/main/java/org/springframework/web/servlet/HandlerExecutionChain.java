@@ -134,12 +134,12 @@ public class HandlerExecutionChain {
 	 * that this interceptor has already dealt with the response itself.
 	 */
 	boolean applyPreHandle(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		HandlerInterceptor[] interceptors = getInterceptors();
+		HandlerInterceptor[] interceptors = getInterceptors();		//获取所有的拦截器，迭代执行preHandle方法，如果有拦截住的方法，则return false
 		if (!ObjectUtils.isEmpty(interceptors)) {
 			for (int i = 0; i < interceptors.length; i++) {
 				HandlerInterceptor interceptor = interceptors[i];
 				if (!interceptor.preHandle(request, response, this.handler)) {
-					triggerAfterCompletion(request, response, null);
+					triggerAfterCompletion(request, response, null);		//如果被拦截住，则在此执行afterCompletion拦截调用
 					return false;
 				}
 				this.interceptorIndex = i;
@@ -149,12 +149,12 @@ public class HandlerExecutionChain {
 	}
 
 	/**
-	 * Apply postHandle methods of registered interceptors.
+	 * Apply postHandle methods of registered interceptors.	（执行拦截器后置调用）
 	 */
 	void applyPostHandle(HttpServletRequest request, HttpServletResponse response, @Nullable ModelAndView mv)
 			throws Exception {
 
-		HandlerInterceptor[] interceptors = getInterceptors();
+		HandlerInterceptor[] interceptors = getInterceptors();		//获取所有拦截器执行后置调用
 		if (!ObjectUtils.isEmpty(interceptors)) {
 			for (int i = interceptors.length - 1; i >= 0; i--) {
 				HandlerInterceptor interceptor = interceptors[i];
@@ -171,7 +171,7 @@ public class HandlerExecutionChain {
 	void triggerAfterCompletion(HttpServletRequest request, HttpServletResponse response, @Nullable Exception ex)
 			throws Exception {
 
-		HandlerInterceptor[] interceptors = getInterceptors();
+		HandlerInterceptor[] interceptors = getInterceptors();		//获取所有的拦截器，迭代执行完成调用
 		if (!ObjectUtils.isEmpty(interceptors)) {
 			for (int i = this.interceptorIndex; i >= 0; i--) {
 				HandlerInterceptor interceptor = interceptors[i];

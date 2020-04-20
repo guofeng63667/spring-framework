@@ -18,7 +18,7 @@ package org.springframework.context;
 
 /**
  *
- * 在ConfigurableApplicationContext初始化后进行回调的接口。
+ * 在ConfigurableApplicationContext初始化后进行回调的初始化接口。
  * <br/>------------------------------------------<br/>
  *
  * Callback interface for initializing a Spring {@link ConfigurableApplicationContext}

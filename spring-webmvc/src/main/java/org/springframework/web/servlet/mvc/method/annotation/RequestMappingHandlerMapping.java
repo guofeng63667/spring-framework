@@ -232,7 +232,7 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 
 
 	/**
-	 * {@inheritDoc}
+	 * {@inheritDoc} 判断是否有Controller或者RequestMapping注解
 	 * <p>Expects a handler to have either a type-level @{@link Controller}
 	 * annotation or a type-level @{@link RequestMapping} annotation.
 	 */
@@ -253,11 +253,11 @@ public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMappi
 	@Override
 	@Nullable
 	protected RequestMappingInfo getMappingForMethod(Method method, Class<?> handlerType) {
-		RequestMappingInfo info = createRequestMappingInfo(method);
+		RequestMappingInfo info = createRequestMappingInfo(method);			//获取方法的requestMapping信息（请求路径,参数,请求类型）
 		if (info != null) {
-			RequestMappingInfo typeInfo = createRequestMappingInfo(handlerType);
+			RequestMappingInfo typeInfo = createRequestMappingInfo(handlerType);	//获取controller类型上的requestMapping信息
 			if (typeInfo != null) {
-				info = typeInfo.combine(info);
+				info = typeInfo.combine(info);								//合并方法和类型上的请求信息
 			}
 			String prefix = getPathPrefix(handlerType);
 			if (prefix != null) {

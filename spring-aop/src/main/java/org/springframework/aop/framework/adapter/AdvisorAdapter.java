@@ -22,6 +22,10 @@ import org.aopalliance.intercept.MethodInterceptor;
 import org.springframework.aop.Advisor;
 
 /**
+ * 接口允许对Spring AOP框架进行扩展，以允许处理新的advisor和advice类型。
+ * 实现对象可以从定制的通知类型创建aop MethodInterceptor(AOP联盟拦截器)，从而使这些advice类型能够在springaop框架中使用，该框架在底层使用拦截。
+ * 大多数Spring用户不需要实现这个接口；只有在需要向Spring引入更多的Advisor或Advice类型时才需要这样做。
+ * <br/>------------------------------------------<br/>
  * Interface allowing extension to the Spring AOP framework to allow
  * handling of new Advisors and Advice types.
  *

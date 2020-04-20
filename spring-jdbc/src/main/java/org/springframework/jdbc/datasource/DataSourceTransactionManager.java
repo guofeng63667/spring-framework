@@ -234,12 +234,12 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 	}
 
 	@Override
-	protected Object doGetTransaction() {
+	protected Object doGetTransaction() {	//获取事务对象，包含jdbc connection
 		DataSourceTransactionObject txObject = new DataSourceTransactionObject();
-		txObject.setSavepointAllowed(isNestedTransactionAllowed());
+		txObject.setSavepointAllowed(isNestedTransactionAllowed());		//是否允许保存点
 		ConnectionHolder conHolder =
 				(ConnectionHolder) TransactionSynchronizationManager.getResource(obtainDataSource());
-		txObject.setConnectionHolder(conHolder, false);
+		txObject.setConnectionHolder(conHolder, false);		//保存连接hodler
 		return txObject;
 	}
 
@@ -258,6 +258,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 		Connection con = null;
 
 		try {
+			//如果事务中没有持有连接，则从datasource中拿取一根连接
 			if (!txObject.hasConnectionHolder() ||
 					txObject.getConnectionHolder().isSynchronizedWithTransaction()) {
 				Connection newCon = obtainDataSource().getConnection();
@@ -277,8 +278,9 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 			// Switch to manual commit if necessary. This is very expensive in some JDBC drivers,
 			// so we don't want to do it unnecessarily (for example if we've explicitly
 			// configured the connection pool to set it already).
+			//将自动提交关闭，改为手动提交
 			if (con.getAutoCommit()) {
-				txObject.setMustRestoreAutoCommit(true);
+				txObject.setMustRestoreAutoCommit(true);	//必须回复自动提交改为true
 				if (logger.isDebugEnabled()) {
 					logger.debug("Switching JDBC Connection [" + con + "] to manual commit");
 				}
@@ -294,6 +296,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 			}
 
 			// Bind the connection holder to the thread.
+			// 如果为新的连接holder，则绑定连接holder到当前thread上
 			if (txObject.isNewConnectionHolder()) {
 				TransactionSynchronizationManager.bindResource(obtainDataSource(), txObject.getConnectionHolder());
 			}
@@ -311,8 +314,8 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 	@Override
 	protected Object doSuspend(Object transaction) {
 		DataSourceTransactionObject txObject = (DataSourceTransactionObject) transaction;
-		txObject.setConnectionHolder(null);
-		return TransactionSynchronizationManager.unbindResource(obtainDataSource());
+		txObject.setConnectionHolder(null);	//设置当前事务的连接hodler为null
+		return TransactionSynchronizationManager.unbindResource(obtainDataSource());	//将ConnectionHolder从当前线程上解绑
 	}
 
 	@Override

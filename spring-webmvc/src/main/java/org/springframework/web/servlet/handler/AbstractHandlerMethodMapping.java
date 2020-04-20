@@ -213,7 +213,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 */
 	protected void initHandlerMethods() {
 		for (String beanName : getCandidateBeanNames()) {
-			if (!beanName.startsWith(SCOPED_TARGET_NAME_PREFIX)) {
+			if (!beanName.startsWith(SCOPED_TARGET_NAME_PREFIX)) {		//处理非原型类开头的bean
 				processCandidateBean(beanName);
 			}
 		}
@@ -254,7 +254,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 				logger.trace("Could not resolve type for bean '" + beanName + "'", ex);
 			}
 		}
-		if (beanType != null && isHandler(beanType)) {
+		if (beanType != null && isHandler(beanType)) {		//子类RequestMappingHandlerMapping中isHandler仅判断被Controller或者RequestMapping注解过的
 			detectHandlerMethods(beanName);
 		}
 	}
@@ -280,7 +280,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 									userType.getName() + "]: " + method, ex);
 						}
 					});
-			if (logger.isTraceEnabled()) {
+			if (logger.isTraceEnabled()) {		//此处在启动时打印方法请求路径的映射信息
 				logger.trace(formatMappings(userType, methods));
 			}
 			methods.forEach((method, mapping) -> {

@@ -51,18 +51,18 @@ import org.springframework.util.Assert;
 public class DefaultTransactionStatus extends AbstractTransactionStatus {
 
 	@Nullable
-	private final Object transaction;
+	private final Object transaction;			//事务对象（一般DataSourceTransactionManager返回的为DataSourceTransactionObject对象）
 
-	private final boolean newTransaction;
+	private final boolean newTransaction;		//是否新事务
 
-	private final boolean newSynchronization;
+	private final boolean newSynchronization;	//是否尚未开启事务同步状态
 
-	private final boolean readOnly;
+	private final boolean readOnly;				//是否只读事务
 
 	private final boolean debug;
 
 	@Nullable
-	private final Object suspendedResources;
+	private final Object suspendedResources;	//暂停事务资源（持有的暂停的事务的资源信息）
 
 
 	/**

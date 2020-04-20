@@ -19,6 +19,8 @@ package org.springframework.transaction;
 import org.springframework.lang.Nullable;
 
 /**
+ * 主要包含事务传播行为，事务隔离级别，事务名称等事务相关的定义信息
+ * <br/>------------------------------------------<br/>
  * Interface that defines Spring-compliant transaction properties.
  * Based on the propagation behavior definitions analogous to EJB CMT attributes.
  *

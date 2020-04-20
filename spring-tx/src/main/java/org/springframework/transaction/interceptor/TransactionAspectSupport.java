@@ -316,6 +316,8 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 
 
 	/**
+	 * 在执行invocation前后开启事务，提交事务，invocation中包含了MethodInvocation.proceed()，主要是执行aop的拦截器调用链，而当前开启和提交事务的逻辑也属于拦截器链中。
+	 * <br/>------------------------------------------<br/>
 	 * General delegate for around-advice-based subclasses, delegating to several other template
 	 * methods on this class. Able to handle {@link CallbackPreferringPlatformTransactionManager}
 	 * as well as regular {@link PlatformTransactionManager} implementations.
@@ -353,7 +355,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 		}
 
 		PlatformTransactionManager ptm = asPlatformTransactionManager(tm);
-		final String joinpointIdentification = methodIdentification(method, targetClass, txAttr);
+		final String joinpointIdentification = methodIdentification(method, targetClass, txAttr);	//获取类名+方法名作为连接点名称
 
 		if (txAttr == null || !(ptm instanceof CallbackPreferringPlatformTransactionManager)) {
 			// Standard transaction demarcation with getTransaction and commit/rollback calls.
@@ -363,11 +365,12 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 			try {
 				// This is an around advice: Invoke the next interceptor in the chain.
 				// This will normally result in a target object being invoked.
+				// 执行被代理对象调用
 				retVal = invocation.proceedWithInvocation();
 			}
 			catch (Throwable ex) {
 				// target invocation exception
-				completeTransactionAfterThrowing(txInfo, ex);
+				completeTransactionAfterThrowing(txInfo, ex);	//执行事务回滚
 				throw ex;
 			}
 			finally {
@@ -382,7 +385,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 				}
 			}
 
-			commitTransactionAfterReturning(txInfo);
+			commitTransactionAfterReturning(txInfo);		//执行事务提交
 			return retVal;
 		}
 
@@ -566,10 +569,10 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 			};
 		}
 
-		TransactionStatus status = null;
+		TransactionStatus status = null;	//事务状态信息，持有上一个事务信息
 		if (txAttr != null) {
 			if (tm != null) {
-				status = tm.getTransaction(txAttr);
+				status = tm.getTransaction(txAttr);		//根据事务属性（包含事务隔离级别,传播行为等信息）开启事务，并返回TransactionStatus
 			}
 			else {
 				if (logger.isDebugEnabled()) {

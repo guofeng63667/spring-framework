@@ -1032,11 +1032,11 @@ public class DispatcherServlet extends FrameworkServlet {
 					}
 				}
 
-				if (!mappedHandler.applyPreHandle(processedRequest, response)) {
+				if (!mappedHandler.applyPreHandle(processedRequest, response)) {	//执行拦截器的前置拦截调用
 					return;
 				}
 
-				// Actually invoke the handler.
+				// Actually invoke the handler.		（执行真正的controller方法调用）
 				mv = ha.handle(processedRequest, response, mappedHandler.getHandler());
 
 				if (asyncManager.isConcurrentHandlingStarted()) {
@@ -1044,7 +1044,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				}
 
 				applyDefaultViewName(processedRequest, mv);
-				mappedHandler.applyPostHandle(processedRequest, response, mv);
+				mappedHandler.applyPostHandle(processedRequest, response, mv);		//执行拦截器的后置拦截调用
 			}
 			catch (Exception ex) {
 				dispatchException = ex;
@@ -1054,14 +1054,14 @@ public class DispatcherServlet extends FrameworkServlet {
 				// making them available for @ExceptionHandler methods and other scenarios.
 				dispatchException = new NestedServletException("Handler dispatch failed", err);
 			}
-			processDispatchResult(processedRequest, response, mappedHandler, mv, dispatchException);
+			processDispatchResult(processedRequest, response, mappedHandler, mv, dispatchException);	//执行输出结果 & 执行拦截器AfterCompletion调用
 		}
 		catch (Exception ex) {
-			triggerAfterCompletion(processedRequest, response, mappedHandler, ex);
+			triggerAfterCompletion(processedRequest, response, mappedHandler, ex);	//执行拦截器AfterCompletion调用
 		}
 		catch (Throwable err) {
 			triggerAfterCompletion(processedRequest, response, mappedHandler,
-					new NestedServletException("Handler processing failed", err));
+					new NestedServletException("Handler processing failed", err));	//执行拦截器AfterCompletion调用
 		}
 		finally {
 			if (asyncManager.isConcurrentHandlingStarted()) {
